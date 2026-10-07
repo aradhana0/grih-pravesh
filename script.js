@@ -151,18 +151,17 @@ function setupIntro() {
     if (opened) return;
     opened = true;
     intro.classList.add("open");
-    Chant.autoplay();
+    Chant.play();
     setTimeout(() => {
       document.body.classList.remove("locked");
       startReveals();
-    }, reduceMotion ? 0 : 2000);
-    setTimeout(() => intro.remove(), reduceMotion ? 0 : 3000);
+    }, reduceMotion ? 0 : 3400);
+    setTimeout(() => intro.remove(), reduceMotion ? 0 : 4800);
   }
   intro.addEventListener("click", open);
   intro.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
   intro.focus({ preventScroll: true });
   if (reduceMotion) open();
-  else setTimeout(open, 3500);
 }
 
 function startReveals() {
@@ -266,8 +265,8 @@ function setupRsvp() {
 }
 
 /* ------------------------------------------------------------ Countdown */
-const EVENT_START = new Date("2026-12-20T09:00:00+05:30");
-const EVENT_END = new Date("2026-12-20T14:30:00+05:30");
+const EVENT_START = new Date("2026-10-20T09:00:00+05:30");
+const EVENT_END = new Date("2026-10-20T14:30:00+05:30");
 
 function setupCountdown() {
   const root = document.getElementById("countdown");
@@ -306,201 +305,73 @@ function setupCountdown() {
   }
 }
 
-/* ------------------------------------------------------------ Ganesha stuti
-   Plays assets/ganesha-stuti.mp3 if you add one (see README). Without it, a
-   calm chant is synthesised in the browser: a sung "Om", tanpura drone,
-   temple bells and reverb. Browsers only allow sound after the visitor
-   interacts, so it starts with the tap that opens the doors. */
-const CHANT = { file: "assets/ganesha-stuti.mp3", volume: 0.45 };
+/* ------------------------------------------------------------ Flute music
+   Soft bansuri music in Raag Bhupali (assets/flute.mp3) loops in the background. To use a different
+   recording, replace that file or change CHANT.file. Browsers only allow
+   sound after a tap, so play() is called directly inside the tap that opens
+   the doors (or the first tap anywhere, if that one was missed). */
+const CHANT = { file: "assets/flute.mp3", volume: 0.6 };
 
 const Chant = (() => {
   const btn = document.getElementById("soundToggle");
-  let audio = null, useFile = true, ctx = null, master = null, loopTimer = null;
-  let playing = false, wanted = true;
-  try { wanted = localStorage.getItem("chantMuted") !== "1"; } catch {}
-
-  // Try the recording first; fall back to synthesis if it's missing.
-  audio = new Audio();
+  const audio = new Audio(CHANT.file);
   audio.loop = true;
   audio.preload = "auto";
-  audio.volume = 0;
-  audio.addEventListener("error", () => {
-    useFile = false;
-    if (playing) { playing = false; start(); }
-  });
-  audio.src = CHANT.file;
+  audio.setAttribute("playsinline", "");
+  let wanted = true, fadeRaf = 0;
+  try { wanted = localStorage.getItem("chantMuted") !== "1"; } catch {}
 
-  function fadeAudio(to, ms, then) {
+  // iOS ignores audio.volume (always full); elsewhere this fades in gently.
+  function fadeTo(to, ms, then) {
+    cancelAnimationFrame(fadeRaf);
     const from = audio.volume, t0 = performance.now();
     (function step(t) {
       const k = Math.min(1, (t - t0) / ms);
-      audio.volume = from + (to - from) * k;
-      if (k < 1) requestAnimationFrame(step); else if (then) then();
+      audio.volume = Math.min(1, Math.max(0, from + (to - from) * k));
+      if (k < 1) fadeRaf = requestAnimationFrame(step); else if (then) then();
     })(t0);
   }
-
-  /* ---- synthesis ---- */
-  const SA = 138.59; // C#3, a comfortable chanting pitch
-
-  function initCtx() {
-    if (ctx) return;
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    master = ctx.createGain();
-    master.gain.value = 0;
-    const comp = ctx.createDynamicsCompressor();
-    const reverb = ctx.createConvolver();
-    const len = ctx.sampleRate * 4;
-    const ir = ctx.createBuffer(2, len, ctx.sampleRate);
-    for (let c = 0; c < 2; c++) {
-      const d = ir.getChannelData(c);
-      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
-    }
-    reverb.buffer = ir;
-    const wet = ctx.createGain(); wet.gain.value = 0.55;
-    const dry = ctx.createGain(); dry.gain.value = 0.7;
-    master.connect(dry).connect(comp);
-    master.connect(reverb).connect(wet).connect(comp);
-    comp.connect(ctx.destination);
-  }
-
-  function pluck(freq, t, gain) {
-    const out = ctx.createGain();
-    out.gain.setValueAtTime(0.0001, t);
-    out.gain.exponentialRampToValueAtTime(gain, t + 0.03);
-    out.gain.exponentialRampToValueAtTime(0.0001, t + 5);
-    const lp = ctx.createBiquadFilter();
-    lp.type = "lowpass";
-    lp.frequency.setValueAtTime(2400, t);
-    lp.frequency.exponentialRampToValueAtTime(500, t + 4);
-    lp.connect(out).connect(master);
-    [0, 3, -4].forEach(detune => {
-      const o = ctx.createOscillator();
-      o.type = "sawtooth";
-      o.frequency.value = freq;
-      o.detune.value = detune;
-      o.connect(lp);
-      o.start(t); o.stop(t + 5.1);
-    });
-  }
-
-  function om(t, dur, freq, gain) {
-    const src = ctx.createOscillator();
-    src.type = "sawtooth";
-    src.frequency.value = freq;
-    const vib = ctx.createOscillator(), vibAmt = ctx.createGain();
-    vib.frequency.value = 4.8; vibAmt.gain.value = freq * 0.006;
-    vib.connect(vibAmt).connect(src.frequency);
-
-    const env = ctx.createGain();
-    env.gain.setValueAtTime(0.0001, t);
-    env.gain.exponentialRampToValueAtTime(gain, t + 1.4);
-    env.gain.setValueAtTime(gain, t + dur - 1.8);
-    env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    env.connect(master);
-
-    // "O": vowel formants, crossfading into "M": a closed-mouth hum
-    const vowel = ctx.createGain(), hum = ctx.createGain();
-    const mid = t + dur * 0.45;
-    vowel.gain.setValueAtTime(1, t); vowel.gain.setValueAtTime(1, mid); vowel.gain.linearRampToValueAtTime(0.02, mid + 1.2);
-    hum.gain.setValueAtTime(0.02, t); hum.gain.setValueAtTime(0.02, mid); hum.gain.linearRampToValueAtTime(1, mid + 1.2);
-    vowel.connect(env); hum.connect(env);
-    [[450, 9, 1], [800, 10, 0.45], [2830, 14, 0.08]].forEach(([f, q, g]) => {
-      const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = f; bp.Q.value = q;
-      const fg = ctx.createGain(); fg.gain.value = g * 4;
-      src.connect(bp).connect(fg).connect(vowel);
-    });
-    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 320; lp.Q.value = 2;
-    const lg = ctx.createGain(); lg.gain.value = 1.4;
-    src.connect(lp).connect(lg).connect(hum);
-
-    src.start(t); vib.start(t);
-    src.stop(t + dur + 0.1); vib.stop(t + dur + 0.1);
-  }
-
-  function bell(t, base, gain) {
-    [[1, 1], [2.76, 0.5], [5.4, 0.25], [8.93, 0.12]].forEach(([r, g]) => {
-      const o = ctx.createOscillator(), e = ctx.createGain();
-      o.type = "sine"; o.frequency.value = base * r;
-      e.gain.setValueAtTime(0.0001, t);
-      e.gain.exponentialRampToValueAtTime(gain * g, t + 0.01);
-      e.gain.exponentialRampToValueAtTime(0.0001, t + 7 / Math.sqrt(r));
-      o.connect(e).connect(master);
-      o.start(t); o.stop(t + 7.5);
-    });
-  }
-
-  // One 12-second cycle: tanpura Pa–Sa–Sa–Sa twice, an Om on each half.
-  let cycle = 0;
-  function scheduleCycle() {
-    const t = ctx.currentTime + 0.1;
-    const notes = [SA * 0.75, SA, SA, SA / 2];
-    for (let i = 0; i < 8; i++) pluck(notes[i % 4], t + i * 1.5, 0.05);
-    om(t + 0.3, 5.6, SA, 0.16);
-    om(t + 0.3, 5.6, SA / 2, 0.07);
-    om(t + 6.3, 5.4, SA, 0.15);
-    om(t + 6.3, 5.4, SA / 2, 0.07);
-    if (cycle % 2 === 0) bell(t + 0.05, 698, 0.05);
-    cycle++;
-  }
-
-  /* ---- controls ---- */
   function render() {
-    btn.setAttribute("aria-pressed", String(playing));
-    btn.setAttribute("aria-label", playing ? "Pause Ganesha stuti" : "Play Ganesha stuti");
+    const on = !audio.paused;
+    btn.setAttribute("aria-pressed", String(on));
+    btn.setAttribute("aria-label", on ? "Pause flute music" : "Play flute music");
   }
-
   function start() {
-    if (playing) return;
-    playing = true;
-    render();
-    if (useFile) {
-      audio.play().then(() => fadeAudio(CHANT.volume, 2500)).catch(err => {
-        if (err && err.name === "NotAllowedError") { playing = false; render(); }
-      });
-      return;
-    }
-    initCtx();
-    ctx.resume().then(() => {
-      if (ctx.state !== "running") { playing = false; render(); return; }
-      master.gain.cancelScheduledValues(ctx.currentTime);
-      master.gain.setTargetAtTime(CHANT.volume, ctx.currentTime, 1);
-      if (!loopTimer) { scheduleCycle(); loopTimer = setInterval(scheduleCycle, 12000); }
-    });
+    if (!audio.paused) return;
+    audio.volume = 0;
+    const p = audio.play();
+    fadeTo(CHANT.volume, 2500);
+    if (p) p.catch(() => render());
   }
-
   function stop() {
-    if (!playing) return;
-    playing = false;
-    render();
-    if (useFile) { fadeAudio(0, 600, () => audio.pause()); return; }
-    if (!ctx) return;
-    master.gain.setTargetAtTime(0, ctx.currentTime, 0.25);
-    clearInterval(loopTimer); loopTimer = null;
-    setTimeout(() => { if (!playing) ctx.suspend(); }, 1500);
+    fadeTo(0, 500, () => audio.pause());
   }
+  audio.addEventListener("play", render);
+  audio.addEventListener("pause", render);
 
   btn.addEventListener("click", () => {
-    wanted = !playing;
+    wanted = audio.paused;
     try { localStorage.setItem("chantMuted", wanted ? "0" : "1"); } catch {}
     wanted ? start() : stop();
   });
 
-  // Pause while the tab is hidden; resume on return.
   let pausedByHide = false;
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) { pausedByHide = playing; stop(); }
+    if (document.hidden) { pausedByHide = !audio.paused; if (pausedByHide) audio.pause(); }
     else if (pausedByHide) { pausedByHide = false; start(); }
   });
 
-  // If the doors opened by themselves (no tap), start on the first interaction.
-  function unlock() {
-    ["pointerdown", "keydown", "touchend"].forEach(e => document.removeEventListener(e, unlock, true));
+  // Safety net: start on the first tap/click/key anywhere if not yet playing.
+  const events = ["click", "touchend", "keydown"];
+  function unlock(e) {
+    if (e.target.closest && e.target.closest("#soundToggle")) return;
+    events.forEach(n => document.removeEventListener(n, unlock, true));
     if (wanted) start();
   }
-  ["pointerdown", "keydown", "touchend"].forEach(e => document.addEventListener(e, unlock, true));
+  events.forEach(n => document.addEventListener(n, unlock, true));
 
   render();
-  return { autoplay() { if (wanted) start(); } };
+  return { play() { if (wanted) start(); } };
 })();
 
 /* ------------------------------------------------------------ Init */

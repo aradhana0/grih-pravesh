@@ -42,7 +42,7 @@ body.locked { overflow: hidden; }
   background: radial-gradient(circle at 50% 55%, #3a2412 0%, #1d1009 70%);
   perspective: 1600px;
   cursor: pointer;
-  transition: opacity 1.2s ease 1.6s, visibility 0s linear 2.8s;
+  transition: opacity 1.2s ease 3s, visibility 0s linear 4.2s;
   outline: none;
 }
 .intro-glow {
@@ -54,8 +54,14 @@ body.locked { overflow: hidden; }
   position: absolute; text-align: center; color: var(--maroon);
   opacity: 0; transform: scale(.9); transition: opacity 1s ease .6s, transform 1.6s ease .6s;
 }
-.intro-welcome .om { font-size: 64px; color: var(--gold); display: block; }
-.intro-welcome p { font-family: var(--script); font-size: 46px; margin: 0; }
+.intro-welcome .ganesha {
+  display: block; width: min(64vw, 280px); margin: 0 auto 4px;
+  transform: translateY(20px) scale(.85); opacity: 0;
+  transition: transform 1.6s cubic-bezier(.2, .8, .3, 1) .9s, opacity 1.2s ease .9s;
+}
+.intro.open .intro-welcome .ganesha { transform: none; opacity: 1; }
+.intro-welcome { width: min(84vw, 440px); }
+.intro-welcome p { font-family: var(--script); font-size: clamp(30px, 9vw, 46px); margin: 0; }
 
 .doorway {
   position: relative; display: flex;
@@ -323,6 +329,20 @@ a.detail:hover .map-link { text-decoration: underline; }
 @keyframes sheen { 0%, 60% { left: -60%; } 100% { left: 130%; } }
 @keyframes bob { 50% { transform: translateY(-6px); } }
 
+/* ---------------------------------------------------------------- Ganesha
+   A watercolour picture usually has a paper background: multiply blends it
+   into the page and the radial mask feathers its edges. */
+.ganesha {
+  mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+}
+.ganesha-card {
+  display: block; width: 210px; margin: -8px auto 0;
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float { 50% { transform: translateY(-5px); } }
+
 /* ---------------------------------------------------------------- Shloka, date, countdown */
 .shloka {
   font-family: "Noto Serif Devanagari", serif; font-size: 14px; line-height: 1.7;
@@ -399,6 +419,7 @@ a.detail:hover .map-link { text-decoration: underline; }
   .rsvp-btn { padding: 14px 40px; }
   .choices { grid-template-columns: 1fr; }
   .shloka { font-size: 12.5px; }
+  .ganesha-card { width: 170px; }
   .countdown-units { gap: 6px; }
   .unit small { font-size: 11px; letter-spacing: .06em; }
   .sound-toggle { right: 12px; bottom: 12px; width: 44px; height: 44px; padding: 10px; }

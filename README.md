@@ -1,6 +1,6 @@
 # Griha Pravesh · Aradhana & Yogesh
 
-An animated, static housewarming invitation website for **Sunday, 20 December 2026**: the carved doors open into the invitation, with falling petals, swaying lamps, a marigold toran, a soft Ganesha stuti chant, a live countdown and an RSVP button wired to Google Forms.
+An animated, static housewarming invitation website for **Tuesday, 20 October 2026**: the carved doors open into the invitation, with falling petals, swaying lamps, a marigold toran, Lord Ganesha's blessing, soft flute music, a live countdown and an RSVP button wired to Google Forms.
 
 No build step is needed. Open `index.html` in a browser, or host the folder anywhere that serves static files.
 
@@ -9,6 +9,8 @@ No build step is needed. Open `index.html` in a browser, or host the folder anyw
 | `index.html` | Page content |
 | `styles.css` | Design and animations |
 | `script.js` | Door intro, petals, toran/vines, RSVP logic (**RSVP settings are at the top**) |
+| `assets/ganesha.webp` | Watercolour Lord Ganesha shown after the doors open and at the top of the invitation (`.png` also works; hidden if missing) |
+| `assets/flute.mp3` | Background flute music |
 | `assets/invitation.webp` | The original printed invitation (linked in the footer and used for link previews) |
 
 ## RSVP: how it works
@@ -50,14 +52,14 @@ There is always a fallback link to open the Google Form in a new tab.
 
 ## Countdown
 
-The countdown runs to 9:00 AM IST on 20 December 2026 (`EVENT_START` in `script.js`). From then until 2:30 PM it shows "The celebration is today!", and afterwards a thank-you. The "Add to Google Calendar" link adds the event from 9:00 AM to 2:30 PM IST.
+The countdown runs to 9:00 AM IST on 20 October 2026 (`EVENT_START` in `script.js`). From then until 2:30 PM it shows "The celebration is today!", and afterwards a thank-you. The "Add to Google Calendar" link adds the event from 9:00 AM to 2:30 PM IST.
 
-## Ganesha stuti (background chant)
+## Background flute music
 
-* It starts softly with the tap that opens the doors. Browsers block sound until a visitor interacts with the page, so if the doors open by themselves the chant begins on the first tap or key press.
-* The round button at the bottom right mutes or unmutes it, and the choice is remembered. The chant pauses while the tab is in the background.
-* **Default:** a calm chant made in the browser: a sung "Om" over a tanpura drone, with soft temple bells and reverb. The site needs no audio file for this.
-* **Use a real recording:** save an MP3 of the Ganesha stuti you like as `assets/ganesha-stuti.mp3` and it plays on loop instead. Use a recording you're allowed to share, such as royalty-free or your own. Change `CHANT.volume` (0 to 1) in `script.js` to make it louder or softer.
+* Soft bansuri (flute) music in Raag Bhupali over a tanpura drone, `assets/flute.mp3`, loops in the background. It was composed and rendered for this site, so it's free to use.
+* It starts with the tap that opens the doors. Browsers block sound until a visitor taps, so the doors wait for that tap rather than opening by themselves.
+* The round button at the bottom right mutes or unmutes it, and the choice is remembered. The music pauses while the tab is in the background.
+* To use different music, replace `assets/flute.mp3` (or change `CHANT.file` in `script.js`). `CHANT.volume` (0 to 1) sets the level on computers; phones play at the device volume.
 
 ## Host it for free (GitHub Pages)
 
@@ -69,6 +71,6 @@ Netlify Drop (drag the folder onto app.netlify.com/drop) or Vercel work just as 
 
 ## Accessibility
 
-* Doors open on tap, Enter/Space, or automatically after ~3.5 s.
+* Doors open on tap or Enter/Space.
 * Visitors with "reduce motion" turned on skip the animations and see the invitation immediately.
 * The address links to Google Maps.
