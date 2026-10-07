@@ -56,7 +56,7 @@ The countdown runs to 9:00 AM IST on 20 October 2026 (`EVENT_START` in `script.j
 
 ## Background flute music
 
-* Soft bansuri (flute) music in Raag Bhupali over a tanpura drone, `assets/flute.mp3`, loops in the background. It was composed and rendered for this site, so it's free to use.
+* Soft solo bansuri (flute) music in Raag Bhupali, `assets/flute.mp3`, loops in the background. It was composed and rendered for this site, so it's free to use.
 * It starts with the tap that opens the doors. Browsers block sound until a visitor taps, so the doors wait for that tap rather than opening by themselves.
 * The round button at the bottom right mutes or unmutes it, and the choice is remembered. The music pauses while the tab is in the background.
 * To use different music, replace `assets/flute.mp3` (or change `CHANT.file` in `script.js`). `CHANT.volume` (0 to 1) sets the level on computers; phones play at the device volume.
