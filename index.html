@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Griha Pravesh · Aradhana &amp; Yogesh</title>
+  <meta name="description" content="Aradhana and Yogesh invite you to their Griha Pravesh &amp; Housewarming Ceremony at Sobha Windsor, Whitefield, Bangalore.">
+  <meta property="og:title" content="Griha Pravesh · Aradhana &amp; Yogesh">
+  <meta property="og:description" content="A new door, a new beginning… Join us to seek blessings and celebrate our new home.">
+  <meta property="og:image" content="assets/invitation.webp">
+  <meta name="theme-color" content="#7a1f2b">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+Devanagari:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="locked">
+
+  <!-- ============ Intro: the doors open ============ -->
+  <div class="intro" id="intro" role="button" tabindex="0" aria-label="Open the invitation">
+    <div class="intro-glow"></div>
+    <div class="intro-welcome">
+      <span class="om">ॐ</span>
+      <p>Shubh Griha Pravesh</p>
+    </div>
+    <div class="toran" id="introToran" aria-hidden="true"></div>
+    <div class="doorway">
+      <div class="door door-left"><div class="panel"></div><div class="panel"></div><span class="ring"></span></div>
+      <div class="door door-right"><div class="panel"></div><div class="panel"></div><span class="ring"></span></div>
+    </div>
+    <p class="intro-hint">Tap to open the door <span>· with sound</span></p>
+  </div>
+
+  <!-- ============ Ambient decoration ============ -->
+  <canvas id="petals" aria-hidden="true"></canvas>
+  <div class="lamp lamp-left" aria-hidden="true"><span class="chain"></span><span class="bell"></span><span class="flame"></span></div>
+  <div class="lamp lamp-right" aria-hidden="true"><span class="chain"></span><span class="bell"></span><span class="flame"></span></div>
+  <div class="vine vine-left" aria-hidden="true"></div>
+  <div class="vine vine-right" aria-hidden="true"></div>
+
+  <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" aria-label="Play Ganesha stuti" title="Ganesha stuti">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12"/><path class="mute" d="M16 9l6 6M22 9l-6 6"/></svg>
+  </button>
+
+  <!-- ============ Invitation ============ -->
+  <main class="card">
+    <header class="arch reveal">
+      <span class="om big">ॐ</span>
+      <p class="shloka" lang="sa">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
+      <p class="tagline">A new door<br>a new beginning…</p>
+      <div class="flourish"></div>
+    </header>
+
+    <div class="toran toran-card reveal" id="cardToran" aria-hidden="true"></div>
+
+    <section class="hosts">
+      <h1 class="names reveal"><span>Aradhana</span> <em>and</em> <span>Yogesh</span></h1>
+      <p class="invite reveal">invite you to our</p>
+      <div class="divider reveal"><span>⌂</span></div>
+      <h2 class="title reveal">Griha Pravesh</h2>
+      <p class="amp reveal">&amp;</p>
+      <h3 class="subtitle reveal">Housewarming Ceremony</h3>
+      <div class="divider small reveal"><span>❀</span></div>
+      <p class="message reveal">
+        As we step into our new home,<br>
+        we would be delighted to have you with us<br>
+        to seek blessings and celebrate this special beginning.
+      </p>
+    </section>
+
+    <div class="date-banner reveal">
+      <span class="weekday">Sunday</span>
+      <span class="date"><b>20</b><span>December<br>2026</span></span>
+    </div>
+
+    <section class="details">
+      <div class="detail reveal">
+        <div class="icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l3 5h-6zM12 20h24l-3-7H15zM14 20v20M34 20v20M20 26h8v14h-8zM8 40h32v4H8zM24 9v4"/></svg>
+        </div>
+        <h4>Griha Pravesh Puja</h4>
+        <p>9:00 AM</p>
+      </div>
+      <div class="detail reveal">
+        <div class="icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="10"/><circle cx="24" cy="24" r="5"/><path d="M8 8v10a3 3 0 006 0V8M11 18v22M40 8c-4 2-5 8-5 14h5v18"/></svg>
+        </div>
+        <h4>Lunch</h4>
+        <p>12:30 PM to 2:30 PM</p>
+      </div>
+      <a class="detail reveal" href="https://www.google.com/maps/search/?api=1&query=Sobha+Windsor+Whitefield+Bangalore" target="_blank" rel="noopener">
+        <div class="icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44s14-14 14-25a14 14 0 10-28 0c0 11 14 25 14 25z"/><circle cx="24" cy="19" r="5"/></svg>
+        </div>
+        <h4>9173, Sobha Windsor</h4>
+        <p>Whitefield, Bangalore</p>
+        <span class="map-link">Open in Maps →</span>
+      </a>
+    </section>
+
+    <section class="countdown reveal" id="countdown" aria-live="polite">
+      <p class="countdown-label">Counting down to our Griha Pravesh</p>
+      <div class="countdown-units">
+        <div class="unit"><span data-unit="days">00</span><small>Days</small></div>
+        <div class="unit"><span data-unit="hours">00</span><small>Hours</small></div>
+        <div class="unit"><span data-unit="minutes">00</span><small>Minutes</small></div>
+        <div class="unit"><span data-unit="seconds">00</span><small>Seconds</small></div>
+      </div>
+      <p class="countdown-done" hidden></p>
+      <a class="calendar-link" target="_blank" rel="noopener"
+         href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Griha%20Pravesh%20%E2%80%93%20Aradhana%20%26%20Yogesh&dates=20261220T033000Z/20261220T090000Z&location=9173%2C%20Sobha%20Windsor%2C%20Whitefield%2C%20Bangalore&details=Griha%20Pravesh%20Puja%209%3A00%20AM%2C%20Lunch%2012%3A30%E2%80%932%3A30%20PM">Add to Google Calendar</a>
+    </section>
+
+    <p class="presence reveal">Your presence will make our new beginning<br>even more special.</p>
+
+    <div class="rsvp-wrap reveal">
+      <button class="rsvp-btn" id="rsvpBtn" type="button">
+        <span class="rsvp-main">Please RSVP</span>
+        <span class="rsvp-sub">by 10 December 2026</span>
+      </button>
+    </div>
+
+    <footer class="foot reveal">
+      <a href="assets/invitation.webp" target="_blank" rel="noopener">View the printed invitation</a>
+      <p>With love &amp; blessings · Aradhana &amp; Yogesh</p>
+    </footer>
+  </main>
+
+  <!-- ============ RSVP dialog ============ -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" type="button" aria-label="Close" data-close>×</button>
+      <h2 id="modalTitle">RSVP</h2>
+      <p class="modal-sub">Kindly respond by 10 December 2026</p>
+
+      <!-- Custom form: used when field IDs are set in script.js -->
+      <form id="rsvpForm" class="rsvp-form" hidden novalidate>
+        <label>Your name
+          <input name="name" type="text" autocomplete="name" required placeholder="Full name">
+        </label>
+        <label>Phone number
+          <input name="phone" type="tel" autocomplete="tel" placeholder="Optional">
+        </label>
+        <fieldset>
+          <legend>Will you be joining us?</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="attending" value="yes" required><span>Joyfully accept</span></label>
+            <label class="choice"><input type="radio" name="attending" value="no"><span>Regretfully decline</span></label>
+          </div>
+        </fieldset>
+        <label class="guests-field">Number of guests (including you)
+          <input name="guests" type="number" min="1" max="20" value="1" inputmode="numeric">
+        </label>
+        <label>Blessings or message
+          <textarea name="message" rows="3" placeholder="Optional"></textarea>
+        </label>
+        <p class="form-error" id="formError" role="alert"></p>
+        <button class="submit-btn" type="submit">Send RSVP</button>
+      </form>
+
+      <!-- Fallback: your Google Form embedded right here -->
+      <div id="rsvpEmbed" class="rsvp-embed" hidden>
+        <iframe id="formFrame" title="RSVP form" loading="lazy"></iframe>
+      </div>
+
+      <div id="rsvpThanks" class="thanks" hidden>
+        <div class="thanks-diya">🪔</div>
+        <h3 id="thanksTitle">Thank you!</h3>
+        <p id="thanksText">Your RSVP has been received. We can’t wait to welcome you home.</p>
+      </div>
+
+      <p class="modal-alt"><a id="formLink" target="_blank" rel="noopener">Open the RSVP form in Google Forms ↗</a></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
