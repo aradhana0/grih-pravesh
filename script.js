@@ -8,6 +8,16 @@
              See README.md → "Connect the custom RSVP form".
    answers:  the exact option text of your "attending" question.
    ===================================================================== */
+/* =====================================================================
+   CONTACTS for guests who need directions. Phone numbers with country
+   code, e.g. "+91 98765 43210". The section stays hidden while empty.
+   ===================================================================== */
+const CONTACTS = [
+  { name: "Aradhana", phone: "+91 82992 84185" },
+  { name: "Yogesh", phone: "+91 77996 21000" },
+  { name: "Yatish", phone: "+91 75210 78234" },
+];
+
 const RSVP_CONFIG = {
   formBase: "https://docs.google.com/forms/d/1I1H00tBmDb4M9JOXM1fsXmf5YRjnr3xZjHULZT5BkdY/",
   fields: {
@@ -374,11 +384,40 @@ const Chant = (() => {
   return { play() { if (wanted) start(); } };
 })();
 
+/* ------------------------------------------------------------ Contacts */
+function setupContacts() {
+  if (!CONTACTS.length) return;
+  const list = document.getElementById("contactList");
+  const waText = encodeURIComponent("Hi! I'm on my way to your Griha Pravesh at 9173, Sobha Windsor, Whitefield. Could you help me with directions?");
+  const phoneIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg>';
+  const waIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.15l-.3-.18-3 .78.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.25-.12-1.47-.72-1.7-.8s-.39-.13-.56.12-.64.8-.78.97-.29.19-.54.06a6.7 6.7 0 01-3.3-2.9c-.25-.43.25-.4.72-1.33a.45.45 0 00-.02-.43c-.06-.12-.56-1.34-.76-1.84s-.4-.42-.56-.43h-.48a.92.92 0 00-.66.31 2.8 2.8 0 00-.87 2.07 4.8 4.8 0 001 2.57 11 11 0 004.2 3.7c1.56.67 2.17.73 2.95.62a2.5 2.5 0 001.65-1.17 2 2 0 00.14-1.16c-.06-.1-.23-.17-.48-.29z"/></svg>';
+  for (const c of CONTACTS) {
+    const digits = c.phone.replace(/[^\d+]/g, "");
+    const card = document.createElement("div");
+    card.className = "contact";
+    const name = document.createElement("p");
+    name.className = "contact-name";
+    name.textContent = c.name;
+    const num = document.createElement("p");
+    num.className = "contact-phone";
+    num.textContent = c.phone;
+    const actions = document.createElement("div");
+    actions.className = "contact-actions";
+    actions.innerHTML =
+      `<a class="contact-btn" href="tel:${digits}">${phoneIcon}<span>Call</span></a>` +
+      `<a class="contact-btn wa" href="https://wa.me/${digits.replace("+", "")}?text=${waText}" target="_blank" rel="noopener">${waIcon}<span>WhatsApp</span></a>`;
+    card.append(name, num, actions);
+    list.appendChild(card);
+  }
+  document.getElementById("contacts").hidden = false;
+}
+
 /* ------------------------------------------------------------ Init */
 buildToran(document.getElementById("introToran"), 9);
 buildToran(document.getElementById("cardToran"), 11);
 document.querySelectorAll(".vine").forEach(buildVine);
 setupRsvp();
 setupCountdown();
+setupContacts();
 setupIntro();
 if (!reduceMotion) Petals.start(window.innerWidth < 640 ? 18 : 32);

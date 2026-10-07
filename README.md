@@ -50,6 +50,10 @@ There is always a fallback link to open the Google Form in a new tab.
 
 > Why "silently"? Google Forms doesn't allow cross-site reads, so the site can confirm the request was sent but cannot read Google's reply. Test once after setup.
 
+## Contacts
+
+The "Need help finding us?" section lists `CONTACTS` at the top of `script.js`, each with Call and WhatsApp buttons. Edit that list to change names or numbers.
+
 ## Countdown
 
 The countdown runs to 9:00 AM IST on 20 October 2026 (`EVENT_START` in `script.js`). From then until 2:30 PM it shows "The celebration is today!", and afterwards a thank-you. The "Add to Google Calendar" link adds the event from 9:00 AM to 2:30 PM IST.
