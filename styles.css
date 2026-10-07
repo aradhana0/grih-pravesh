@@ -55,7 +55,7 @@ body.locked { overflow: hidden; }
   opacity: 0; transform: scale(.9); transition: opacity 1s ease .6s, transform 1.6s ease .6s;
 }
 .intro-welcome .ganesha {
-  display: block; width: min(64vw, 280px); margin: 0 auto 4px;
+  display: block; width: min(72vw, 320px); margin: 0 auto 6px;
   transform: translateY(20px) scale(.85); opacity: 0;
   transition: transform 1.6s cubic-bezier(.2, .8, .3, 1) .9s, opacity 1.2s ease .9s;
 }
@@ -330,15 +330,10 @@ a.detail:hover .map-link { text-decoration: underline; }
 @keyframes bob { 50% { transform: translateY(-6px); } }
 
 /* ---------------------------------------------------------------- Ganesha
-   A watercolour picture usually has a paper background: multiply blends it
-   into the page and the radial mask feathers its edges. */
-.ganesha {
-  mix-blend-mode: multiply;
-  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
-  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
-}
+   multiply makes a white or paper background melt into the page. */
+.ganesha { mix-blend-mode: multiply; }
 .ganesha-card {
-  display: block; width: 210px; margin: -8px auto 0;
+  display: block; width: 230px; margin: -6px auto 0;
   animation: float 6s ease-in-out infinite;
 }
 @keyframes float { 50% { transform: translateY(-5px); } }
@@ -443,7 +438,7 @@ a.detail:hover .map-link { text-decoration: underline; }
   .rsvp-btn { padding: 14px 40px; }
   .choices { grid-template-columns: 1fr; }
   .shloka { font-size: 12.5px; }
-  .ganesha-card { width: 170px; }
+  .ganesha-card { width: 200px; }
   .countdown-units { gap: 6px; }
   .unit small { font-size: 11px; letter-spacing: .06em; }
   .sound-toggle { right: 12px; bottom: 12px; width: 44px; height: 44px; padding: 10px; }
